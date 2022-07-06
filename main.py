@@ -21,11 +21,9 @@ def main (frecuencia, instrumento, partitura, audio):
 
     harm_dict, amp_dict = instrument.read_instrument()
 
-    score = Note(partitura)
-
     mod = Modulator(amp_dict)
 
-    synth = Synthesizer(harm_dict, frecuencia)
+    synth = Synthesizer(harm_dict, partitura, frecuencia)
 
     synth.make_wav(audio)
 

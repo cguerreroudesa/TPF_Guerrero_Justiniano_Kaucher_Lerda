@@ -3,7 +3,7 @@ from notes import notes_mapping
 class Note ():
     def __init__ (self, filename):
         if '.txt' not in filename:
-            filename = 'instruments/' + filename + '.txt'
+            filename = 'scores/' + filename + '.txt'
         self.filename = filename
 
     def read_notes (self):
@@ -16,7 +16,8 @@ class Note ():
           info[1] is the name of the note
           info[2] is the tiem that the note must last.
         """
-        with open(self.filename, 'r') as f:
+        f_note = self.filename
+        with open(f_note, 'r') as f:
         #aca llamar a funcion que encuentre el largo de la funcion y cree el array de ceros con eso
             lines= f.readlines()
             if '\n' in lines:
@@ -52,7 +53,7 @@ class Note ():
         for x in notes_mapping:
             if x[0] == note:
                 freq = float(x[1])
-            return freq
+                return freq
 
     def frequency (self, note):
         """

@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 from note import Note
 
 class Synthesizer(Note):
-  def __init__(self, harm_dict: dict, sps: float): # recibe un instrumento y una partitura
+  def __init__(self, harm_dict: dict, filename:str, sps: float): # recibe un instrumento y una partitura
+    super().__init__(filename)
     self.harm_dict=harm_dict #lista de largo n, compuesta por los n armónicos del instrumento recibido
     self.sps = int(sps)
     
