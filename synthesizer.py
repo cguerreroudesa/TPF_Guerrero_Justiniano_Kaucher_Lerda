@@ -8,7 +8,7 @@ class Synthesizer(Note):
     super().__init__(filename)
     self.harm_dict=harm_dict #lista de largo n, compuesta por los n armónicos del instrumento recibido
     self.sps = int(sps)
-    
+
   def zero_array(self, song_len: float):
     """
     Receives a song leght
@@ -29,10 +29,9 @@ class Synthesizer(Note):
       -------
         zero_array : numpy.ndarray
     '''
-    end = start + dur
-    if int(self.sps*start) - int(self.sps*end) != len(waveform):
-        waveform = waveform[:+1]
-    zero_array[int(self.sps*start) : int(self.sps*end)] += waveform # Waveform es la senoidal final de la nota
+    if len(waveform) != int(self.sps*start) - int(self.sps*start) + int(self.sps*dur):
+      waveform = waveform[:-1]
+    zero_array[int(self.sps*start) : int(self.sps*start) + int(self.sps*dur)] += waveform 
     return zero_array
 
   def sine_wave(self, harm: int, amplitude: float, dur:float, freq: float):
@@ -68,20 +67,18 @@ class Synthesizer(Note):
     song_len = self.get_song_len()
     zero_array = self.zero_array(song_len)
     array_list = []
-    count = 0
     for a in read:
       start = a[0]
       note = a[1]
       duration = a[2]
 
       freq = self.frequency (note)
-      harm_sum = self.harm_sum(duration, freq) #ESTO ES Y(T)
+      harm_sum = self.harm_sum(duration, freq) 
       t = np.arange(self.sps * song_len)
 
       #mod_sine = self.mod (t, start, duration)
       temp_array = self.array_sum(start, duration, harm_sum, zero_array) #En vez de harm_sum deberia ser mod_sine
       array_list.append(temp_array)
-      count += 1
     final_array = sum(array_list)
     wave = final_array * 1 / np.max( np.abs(final_array) )
     return wave
@@ -91,7 +88,6 @@ class Synthesizer(Note):
       final_sine: the function made from the sum of all of the notes in the song, with the respective amplitude modifiers.
       name: the name"""
       signal = self.signal_generator()
-      #signal = self.normalize (signal)
       waveform_ints = np.int16(signal * (32767 / np.max(np.abs(signal))))
       if ".wav" not in name:
           name += ".wav"
